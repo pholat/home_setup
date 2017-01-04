@@ -3,6 +3,7 @@
 # for examples
 
 set -o vi
+alias BING='echo -ne \'007\''
 
 # If not running interactively, don't do anything
 case $- in
@@ -117,3 +118,23 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+git_branch () { git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'; }
+HOST='\033[02;36m\h'; HOST=' '$HOST
+TIME='\033[00;31m\t \033[00;32m'
+LOCATION=' \033[01;38m`pwd | sed "s#\(/[^/]\{1,\}/[^/]\{1,\}/[^/]\{1,\}/\).*\(/[^/]\{1,\}/[^/]\{1,\}\)/\{0,1\}#\1_\2#g"`'
+BRANCH=' \033[00;33m$(git_branch)\[\033[00m\n\$ '
+PS1=$TIME$USER$LOCATION$BRANCH
+PS2='\[\033[01;36m>'
+export PATH="/cygdrive/c/Progra~2/Meld/:~/bin:$PATH"
+
+
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+#shopt -s checkwinsize
+shopt -s cdspell
+shopt -s cmdhist
+
+alias LOG='tee log`date +"%F-%H-%M-%S"`.txt'
+
+function PRETTY { $* 2>&1 | awk -f ~/.prettyfier.awk; }
+export -f PRETTY

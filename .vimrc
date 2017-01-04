@@ -1,18 +1,24 @@
 set nocompatible
 execute pathogen#infect()
 syntax on
+filetype indent off
 set nocompatible
 set backspace=indent,eol,start
 filetype plugin indent on
 Helptags
 set tw=0
 set cindent
-set shiftwidth=4
-set softtabstop=4
 set tabstop=4
+set shiftwidth=4
+set smarttab
 set expandtab
+set softtabstop=4
 set number
 set nowrap
+set autoindent
+" Makefile no expand tabs
+autocmd FileType make setlocal noexpandtab
+
 nnoremap / /\v
 noremap / /\v
 set incsearch
@@ -35,19 +41,24 @@ vnoremap <C-h> :bp<cr>
 nnoremap ]g :GitGutterNextHunk<cr>
 nnoremap [g :GitGutterPrevHunk<cr>
 "Autosave"
-"Autosave"
 " au FocusLost * :wa "
 " automatically open and close the popup menu / preview window
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 set completeopt=menuone,menu,longest,preview
 " build tags of your own project with Ctrl-F12
-nnoremap <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ <CR>
+nnoremap <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ *<CR>
+nnoremap <C-F11> :!find -regex '.*\.\([c,C,h,H]\)\([p,P,x,X]\)*' > cscope.files && cscope -b -q -k<CR>
 set tags+=~/.vim/tags/cpp
+nnoremap <leader>= :res +10<cr>
+nnoremap <leader>- :res -10<cr>
 nnoremap <leader>h :noh<cr>
 nnoremap <leader>n :cn<cr>
 nnoremap <leader>p :cp<cr>
 " This command adds logging.info in each and every python function in file
 nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Line: '.line(".").' '. submatch(2).''')','g')/<cr>
+" TODO CHECK THIS :D
+nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Fun: '.submatch(2).')'')','g')/<cr>
+map <C-g> :execute " grep -srnw --binary-files=without-match --exclude-dir=.git --include=[*.py] . -e " . expand("<cword>") . " " <bar> cwindow<CR>
 "Airline options"
 let g:airline_powerline_fonts = 1
 set t_Co=256
@@ -133,6 +144,10 @@ let g:syntastic_check_on_open = 1
 py << EOF
 
 
+fun! Add_header()
+    0read !git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+endfun
+
 import os
 import sys
 if 'VIRTUAL_ENV' in os.environ:
@@ -142,3 +157,4 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 
 set cursorline
+au FileType gitcommit call Add_header()
