@@ -3,7 +3,6 @@
 # for examples
 
 set -o vi
-alias BING='echo -ne \'007\''
 
 # If not running interactively, don't do anything
 case $- in
@@ -85,6 +84,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
+    alias BING='echo -ne '\'007'' 
 fi
 
 # colored GCC warnings and errors
@@ -126,7 +126,6 @@ LOCATION=' \033[01;38m`pwd | sed "s#\(/[^/]\{1,\}/[^/]\{1,\}/[^/]\{1,\}/\).*\(/[
 BRANCH=' \033[00;33m$(git_branch)\[\033[00m\n\$ '
 PS1=$TIME$USER$LOCATION$BRANCH
 PS2='\[\033[01;36m>'
-export PATH="/cygdrive/c/Progra~2/Meld/:~/bin:$PATH"
 
 
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
