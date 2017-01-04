@@ -139,14 +139,13 @@ let g:syntastic_javascript_checkers = ['jshint']
 " show any linting errors immediately
 let g:syntastic_check_on_open = 1
 
-"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-"python with virtualenv support
-py << EOF
-
-
 fun! Add_header()
     0read !git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 endfun
+
+"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+"python with virtualenv support
+py << EOF
 
 import os
 import sys
