@@ -60,6 +60,7 @@ set statusline+=%{fugitive#statusline()}
 " YCM "
 let g:ycm_python_binary_path = 'python'
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
 " python - comment out"
 " TODO if file *.py than inoremap <c-\> <esc>0i# <esc>
 " It's better to do that in vim lang file ~/.vim/ftplugin/ "
