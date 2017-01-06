@@ -70,9 +70,8 @@ let g:gitgutter_sign_column_always = 1
 set statusline+=%{fugitive#statusline()}
 " YCM "
 let g:ycm_python_binary_path = 'python'
-if !filereadable(".ycm_extra_conf.py")
-    let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
-endif
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
 " python - comment out"
 " TODO if file *.py than inoremap <c-\> <esc>0i# <esc>
