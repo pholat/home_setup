@@ -1,5 +1,6 @@
 set nocompatible
 execute pathogen#infect()
+set title titlestring=%<%F titlelen=70
 syntax on
 filetype indent off
 set nocompatible
@@ -30,7 +31,7 @@ vnoremap <F1> :set relativenumber!<cr>
 inoremap <F2> :copen<cr>
 nnoremap <F2> :copen<cr>
 vnoremap <F2> :copen<cr>
-nnoremap <F3> :NERDTreeToggle<cr>
+nnoremap <F3> :Obsess!<cr>
 nnoremap <F5> :UndotreeToggle<cr>
 inoremap <C-l> :bn<cr>
 nnoremap <C-l> :bn<cr>
@@ -65,6 +66,7 @@ set t_Co=256
 let g:airline#extensions#tabline#enabled = 1
 set laststatus=2  
 let g:airline_theme='papercolor'
+let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''SESSION!'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 let g:gitgutter_sign_column_always = 1
 set statusline+=%{fugitive#statusline()}
