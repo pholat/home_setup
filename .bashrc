@@ -136,5 +136,5 @@ shopt -s cmdhist
 
 alias LOG='tee log`date +"%F-%H-%M-%S"`.txt'
 
-function PRETTY { $* 2>&1 | awk -f ~/.prettyfier.awk; }
+function PRETTY { $* 2>&1 | awk -f ~/.prettyfier.awk; test ${PIPESTATUS[0]} -eq 0; }
 export -f PRETTY
