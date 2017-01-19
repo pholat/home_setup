@@ -12,7 +12,7 @@ esac
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-HISTCONTROL=ignoreboth
+export HISTCONTROL=ignoreboth:erasedups
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -135,6 +135,12 @@ shopt -s cdspell
 shopt -s cmdhist
 
 alias LOG='tee log`date +"%F-%H-%M-%S"`.txt'
+function CP { rsync -ah --progress2 $1 $2; }
+export CP
 
 function PRETTY { $* 2>&1 | awk -f ~/.prettyfier.awk; test ${PIPESTATUS[0]} -eq 0; }
 export -f PRETTY
+
+function CLEAN_HISTORY { cat .bash_history | sort -u | sed -f .bashhistclean > tmp.hist && vim tmp.hist; }
+export -f CLEAN_HISTORY
+
