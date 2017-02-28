@@ -59,7 +59,8 @@ nnoremap <leader>p :cp<cr>
 nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Line: '.line(".").' '. submatch(2).''')','g')/<cr>
 " TODO CHECK THIS :D
 nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Fun: '.submatch(2).')'')','g')/<cr>
-map <C-g> :execute " grep -srnw --binary-files=without-match --exclude-dir=.git --include=[*.py] . -e " . expand("<cword>") . " " <bar> cwindow<CR>
+map <C-g> :Ack . expand("<cword>") 
+" map <C-g> :execute " grep -srnw --binary-files=without-match --exclude-dir=.git --include=[*.py] . -e " . expand("<cword>") . " " <bar> cwindow<CR>
 "Airline options"
 let g:airline_powerline_fonts = 1
 set t_Co=256
@@ -74,6 +75,7 @@ set statusline+=%{fugitive#statusline()}
 let g:ycm_python_binary_path = 'python'
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
+let g:ycm_add_preview_to_completeopt = 1
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
 " python - comment out"
 " TODO if file *.py than inoremap <c-\> <esc>0i# <esc>
@@ -106,6 +108,11 @@ let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 let g:UltiSnipsExpandTrigger="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+"Ack vim 
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
 
 " automatically open and close the popup menu / preview window
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif

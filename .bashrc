@@ -144,3 +144,7 @@ export -f PRETTY
 function CLEAN_HISTORY { cat .bash_history | sort -u | sed -f .bashhistclean > tmp.hist && vim tmp.hist; }
 export -f CLEAN_HISTORY
 
+function B64 { sha1sum $1 | xxd -r -p | base64; }
+export -f B64
+
+eval $(thefuck --alias)
