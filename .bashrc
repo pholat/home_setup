@@ -148,6 +148,8 @@ function B64 { sha1sum $1 | xxd -r -p | base64; }
 export -f B64
 
 eval $(thefuck --alias)
+function DBG { bash -evx $@; }
+export DBG
 
 alias gs='git status '
 alias ga='git add '
