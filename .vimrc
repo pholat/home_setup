@@ -1,7 +1,9 @@
 set nocompatible
 execute pathogen#infect()
-set title titlestring=%<%F titlelen=70
 syntax on
+set background=light
+let g:solarized_termcolors=256
+colorscheme solarized
 filetype indent off
 set nocompatible
 set backspace=indent,eol,start
@@ -63,6 +65,9 @@ map <C-g> :Ack . expand("<cword>")
 " map <C-g> :execute " grep -srnw --binary-files=without-match --exclude-dir=.git --include=[*.py] . -e " . expand("<cword>") . " " <bar> cwindow<CR>
 "Airline options"
 let g:airline_powerline_fonts = 1
+" Don't show seperators
+let g:airline_left_sep=''
+let g:airline_right_sep=''
 set t_Co=256
 let g:airline#extensions#tabline#enabled = 1
 set laststatus=2  
@@ -109,6 +114,21 @@ let g:UltiSnipsExpandTrigger="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
+" Undotree persistent
+" Put plugins and dictionaries in this dir (also on Windows)
+let vimDir = '$HOME/.vim'
+let &runtimepath.=','.vimDir
+
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+    let myUndoDir = expand(vimDir . '/undodir')
+    " Create dirs
+    call system('mkdir ' . vimDir)
+    call system('mkdir ' . myUndoDir)
+    let &undodir = myUndoDir
+    set undofile
+endif
+
 "Ack vim 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -152,6 +172,8 @@ let g:syntastic_check_on_open = 1
 fun! Add_header()
     0read !git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 endfun
+
+au BufNewFile,BufRead *.log set filetype=log
 
 "au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 "python with virtualenv support
