@@ -20,6 +20,9 @@ set autoindent
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
+let g:netrw_browse_split = 3
 " Makefile no expand tabs
 autocmd FileType make setlocal noexpandtab
 
