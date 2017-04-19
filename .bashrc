@@ -162,3 +162,4 @@ alias gx='gitx --all'
 
 alias got='git '
 alias get='git '
+alias cdr='tmpvar=$( ls -d */ -tr | tail -1) && cd "$tmpvar"'
