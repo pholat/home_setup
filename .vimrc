@@ -57,12 +57,12 @@ nnoremap <leader>- :res -10<cr>
 nnoremap <leader>h :noh<cr>
 nnoremap <leader>n :cn<cr>
 nnoremap <leader>p :cp<cr>
+nnoremap <leader>d :windo diffthis<cr>
+nnoremap <C-g> :Ack . expand("<cword>")<cr>
 " This command adds logging.info in each and every python function in file
 nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Line: '.line(".").' '. submatch(2).''')','g')/<cr>
-" TODO CHECK THIS :D
-nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Fun: '.submatch(2).')'')','g')/<cr>
-map <C-g> :Ack . expand("<cword>") 
-" map <C-g> :execute " grep -srnw --binary-files=without-match --exclude-dir=.git --include=[*.py] . -e " . expand("<cword>") . " " <bar> cwindow<CR>
+" REMOVES not needded date... in progress
+nnoremap <leader>X :%s/^\([0-9]\{2\}:\)\{2\}[0-9]\{2}\.[0-9]\{3\}\(> <[0-9]\{1,2\}>[A-Z][a-z]\{2\}\s*[0-9]\{1,2\} \)//g<cr>
 "Airline options"
 let g:airline_powerline_fonts = 1
 " Don't show seperators
@@ -114,6 +114,11 @@ let g:UltiSnipsExpandTrigger="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
+" Markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+let g:markdown_minlines = 100
+
 " Undotree persistent
 " Put plugins and dictionaries in this dir (also on Windows)
 let vimDir = '$HOME/.vim'
@@ -156,9 +161,6 @@ function AddShComments(funcname)
 endfunction
 
 vnoremap <leader>R :call AddShComments(@*)<cr>
-
-" TODO add au
-map <C-g> :execute " grep -srnw --include={*.c*,*.h*,*.C*,*.H*} --binary-files=without-match --exclude-dir=.git . -e " . expand("<cword>") . " " <bar> cwindow<CR>
 
 source ~/.vim/cs/cscope_maps.vim
 set cscopequickfix=s+,c+,d+,i+,t+,e+,a+
