@@ -49,8 +49,8 @@ nnoremap [g :GitGutterPrevHunk<cr>
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 set completeopt=menuone,menu,longest,preview
 " build tags of your own project with Ctrl-F12
-nnoremap <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ *<CR>
-nnoremap <C-F11> :!find -regex '.*\.\([c,C,h,H]\)\([p,P,x,X]\)*' > cscope.files && cscope -b -q -k<CR>
+nnoremap <F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ *<CR>
+nnoremap <F11> :!find -regex '.*\.\([c,C,h,H]\)\([p,P,x,X]\)*' > cscope.files && cscope -b -q -k<CR>
 set tags+=~/.vim/tags/cpp
 nnoremap <leader>= :res +10<cr>
 nnoremap <leader>- :res -10<cr>
