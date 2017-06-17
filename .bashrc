@@ -154,6 +154,7 @@ alias :e='vim'
 alias got='git '
 alias get='git '
 alias cdr='tmpvar=$( ls -d */ -tr | tail -1) && cd "$tmpvar"'
+
 #echo -en "\e]P0073642" #black
 #echo -en "\e]P8002b36" #brblack
 #echo -en "\e]P1dc322f" #red
@@ -172,3 +173,4 @@ alias cdr='tmpvar=$( ls -d */ -tr | tail -1) && cd "$tmpvar"'
 #echo -en "\e]PFfdf6e3" #brwhite
 #clear #for background artifacting
 
+alias mail='( eval $(gpg --decrypt ~/.mail_passwd); imapfilter -vv &&  mutt $@ )'

@@ -18,6 +18,7 @@ BEGIN {
 
     arr[1]="error";
     arr[2]="warning";
+    arr[3]="info";
     for( a in arr ) {
         arr[a] = "( |^)"arr[a]"[:s]{1,2}?([[:blank:]].*|$)"
     }
@@ -27,6 +28,8 @@ BEGIN {
          printf("%s%s%s%s%s\n", red, fmt["B"],$0, fmt["b"], nocol )
      } else if( tolower($0) ~ arr[2] ) {
          printf("%s%s%s%s%s\n", magenta, fmt["B"],$0, fmt["b"], nocol )
+     } else if( tolower($0) ~ arr[3] ) {
+         printf("%s%s%s%s%s\n", green, fmt["B"],$0, fmt["b"], nocol )
      } else {
          printf("%s\n",$0)
      }

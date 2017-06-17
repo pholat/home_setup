@@ -11,8 +11,12 @@ filetype plugin indent on
 Helptags
 set autoindent noexpandtab tabstop=4 shiftwidth=4
 set tw=0
-set smarttab
+set cindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
 set softtabstop=4
+set smarttab
 set number
 set nowrap
 set autoindent
@@ -87,7 +91,7 @@ set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 let g:gitgutter_sign_column_always = 1
 set statusline+=%{fugitive#statusline()}
 " YCM "
-let g:ycm_python_binary_path = 'python'
+let g:ycm_python_binary_path = 'python3'
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_add_preview_to_completeopt = 1

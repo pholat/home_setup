@@ -1,0 +1,38 @@
+set imap_user = 'pholat@gmail.com'
+set imap_pass = $MAIL_PASSWD
+
+set folder = imaps://imap.gmail.com/
+set spoolfile = +INBOX
+set record = "+[Gmail]/Sent Mail"
+set postponed = "+[Gmail]/Drafts"
+
+source $MAILCONF~/.mutt/mutt-colors-solarized-light-256.muttrc
+
+set sidebar_visible = yes
+set sidebar_width = 20
+set sidebar_delim='|'
+mailboxes +Inbox +minelascous +Allegro +Ebay +Facebook +google\+ +HackaDay +HS-WAW
+bind index CP sidebar-prev
+bind index CN sidebar-next
+bind index CO sidebar-open
+bind pager CP sidebar-prev
+bind pager CN sidebar-next
+bind pager CO sidebar-open
+
+set header_cache=~/.mutt/cache/headers
+set message_cachedir=~/.mutt/cache/bodies
+set certificate_file=~/.mutt/certificates
+set move = no
+set include
+set sort = 'threads'
+set sort_aux = 'reverse-last-date-received'
+set auto_tag = yes
+#ignore "Authentication-Results:"
+#ignore "DomainKey-Signature:"
+#ignore "DKIM-Signature:"
+hdr_order Date From To Cc
+alternative_order text/plain text/html *
+auto_view text/html
+bind editor <Tab> complete-query
+bind editor ^T complete
+bind editor <space> noop 
