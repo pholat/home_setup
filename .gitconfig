@@ -1,0 +1,18 @@
+[core]
+    editor = vim
+    autocrlf = false
+	excludesfile = /home/adamd2/.gitignore_global
+[merge]
+    tool = vimdiff
+[diff]
+    tool = vimdiff
+[push]
+	default = simple
+[alias]
+  co = checkout
+  ci = commit
+  st = status
+  br = branch
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p

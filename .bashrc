@@ -1,7 +1,7 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
-
+alias tmux='TERM=xterm-256color tmux'
 set -o vi
 
 # If not running interactively, don't do anything
@@ -14,9 +14,6 @@ esac
 # See bash(1) for more options
 export HISTCONTROL=ignoreboth:erasedups
 
-# append to the history file, don't overwrite it
-shopt -s histappend
-
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=
 HISTFILESIZE=
@@ -24,10 +21,8 @@ HISTFILESIZE=
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+shopt -s histappend
+shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -130,16 +125,18 @@ PS2='\[\033[01;36m>'
 
 
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-#shopt -s checkwinsize
 shopt -s cdspell
 shopt -s cmdhist
 
 alias LOG='tee log`date +"%F-%H-%M-%S"`.txt'
-function CP { rsync -ah --progress2 $1 $2; }
+function CP { rsync -ah --progress $1 $2; }
 export CP
 
 function PRETTY { $* 2>&1 | awk -f ~/.prettyfier.awk; test ${PIPESTATUS[0]} -eq 0; }
 export -f PRETTY
+
+function SIGN_CHECK { openssl asn1parse -inform DER -in $1; }
+export -f SIGN_CHECK
 
 function CLEAN_HISTORY { cat .bash_history | sort -u | sed -f .bashhistclean > tmp.hist && vim tmp.hist; }
 export -f CLEAN_HISTORY
@@ -151,15 +148,27 @@ eval $(thefuck --alias)
 function DBG { bash -evx $@; }
 export DBG
 
-alias gs='git status '
-alias ga='git add '
-alias gb='git branch '
-alias gc='git commit'
-alias gd='git diff'
-alias go='git checkout '
-alias gk='gitk --all&'
-alias gx='gitx --all'
+alias :q='exit'
+alias :e='vim'
 
 alias got='git '
 alias get='git '
 alias cdr='tmpvar=$( ls -d */ -tr | tail -1) && cd "$tmpvar"'
+#echo -en "\e]P0073642" #black
+#echo -en "\e]P8002b36" #brblack
+#echo -en "\e]P1dc322f" #red
+#echo -en "\e]P9cb4b16" #brred
+#echo -en "\e]P2859900" #green
+#echo -en "\e]PA586e75" #brgreen
+#echo -en "\e]P3b58900" #yellow
+#echo -en "\e]PB657b83" #bryellow
+#echo -en "\e]P4268bd2" #blue
+#echo -en "\e]PC839496" #brblue
+#echo -en "\e]P5d33682" #magenta
+#echo -en "\e]PD6c71c4" #brmagenta
+#echo -en "\e]P62aa198" #cyan
+#echo -en "\e]PE93a1a1" #brcyan
+#echo -en "\e]P7eee8d5" #white
+#echo -en "\e]PFfdf6e3" #brwhite
+#clear #for background artifacting
+

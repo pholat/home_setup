@@ -9,16 +9,17 @@ set nocompatible
 set backspace=indent,eol,start
 filetype plugin indent on
 Helptags
+set autoindent noexpandtab tabstop=4 shiftwidth=4
 set tw=0
-set cindent
-set tabstop=4
-set shiftwidth=4
 set smarttab
-set expandtab
 set softtabstop=4
 set number
 set nowrap
 set autoindent
+
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+endif
 " Makefile no expand tabs
 autocmd FileType make setlocal noexpandtab
 
@@ -34,6 +35,7 @@ inoremap <F2> :copen<cr>
 nnoremap <F2> :copen<cr>
 vnoremap <F2> :copen<cr>
 nnoremap <F3> :Obsess!<cr>
+nnoremap <F2> :NERDTreeToggle<CR>
 nnoremap <F5> :UndotreeToggle<cr>
 inoremap <C-l> :bn<cr>
 nnoremap <C-l> :bn<cr>
@@ -43,6 +45,9 @@ nnoremap <C-h> :bp<cr>
 vnoremap <C-h> :bp<cr>
 nnoremap ]g :GitGutterNextHunk<cr>
 nnoremap [g :GitGutterPrevHunk<cr>
+nnoremap <leader>R :GitGutterRevertHunk<cr>
+nnoremap ]l :lnext<cr>
+nnoremap [l :lprev<cr>
 "Autosave"
 " au FocusLost * :wa "
 " automatically open and close the popup menu / preview window
@@ -58,7 +63,9 @@ nnoremap <leader>h :noh<cr>
 nnoremap <leader>n :cn<cr>
 nnoremap <leader>p :cp<cr>
 nnoremap <leader>d :windo diffthis<cr>
-nnoremap <C-g> :Ack . expand("<cword>")<cr>
+nnoremap <leader>c :cexpr []<cr>
+nnoremap <C-g> :Ack expand("<cword>")<cr>
+vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'
 " This command adds logging.info in each and every python function in file
 nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Line: '.line(".").' '. submatch(2).''')','g')/<cr>
 " REMOVES not needded date... in progress
@@ -98,6 +105,8 @@ let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_cpp_checkers = ['cppcheck']
 let g:syntastic_c_checkers =   ['cppcheck']
 let g:syntastic_loc_list_height = 3
+let g:syntastic_sh_checkers =   ['shellcheck']
+let g:syntastic_loc_list_height = 5
 " To use I add fe: :let g:syntastic_c_include_dirs = ['esp-open-sdk/sdk/include', 'include']"
 
 " OmniCppComplete
@@ -176,6 +185,8 @@ fun! Add_header()
 endfun
 
 au BufNewFile,BufRead *.log set filetype=log
+
+set diffopt+=iwhite
 
 "au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 "python with virtualenv support
