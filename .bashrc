@@ -174,3 +174,4 @@ alias cdr='tmpvar=$( ls -d */ -tr | tail -1) && cd "$tmpvar"'
 #clear #for background artifacting
 
 alias mail='( eval $(gpg --decrypt ~/.mail_passwd); imapfilter -vv &&  mutt $@ )'
+setxkbmap -option caps:swapescape

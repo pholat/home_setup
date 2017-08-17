@@ -38,11 +38,8 @@ set hlsearch
 inoremap <F1> :set relativenumber!<cr>
 nnoremap <F1> :set relativenumber!<cr>
 vnoremap <F1> :set relativenumber!<cr>
-inoremap <F2> :copen<cr>
-nnoremap <F2> :copen<cr>
-vnoremap <F2> :copen<cr>
-nnoremap <F3> :Obsess!<cr>
 nnoremap <F2> :NERDTreeToggle<CR>
+nnoremap <F3> :Obsess!<cr>
 nnoremap <F5> :UndotreeToggle<cr>
 inoremap <C-l> :bn<cr>
 nnoremap <C-l> :bn<cr>
@@ -75,8 +72,8 @@ nnoremap <C-g> :Ack expand("<cword>")<cr>
 vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'
 " This command adds logging.info in each and every python function in file
 nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Line: '.line(".").' '. submatch(2).''')','g')/<cr>
-" REMOVES not needded date... in progress
-nnoremap <leader>X :%s/^\([0-9]\{2\}:\)\{2\}[0-9]\{2}\.[0-9]\{3\}\(> <[0-9]\{1,2\}>[A-Z][a-z]\{2\}\s*[0-9]\{1,2\} \)//g<cr>
+nnoremap <leader>f :NERDTreeFind<cr>
+map <C-g> :Ack . expand("<cword>") 
 "Airline options"
 let g:airline_powerline_fonts = 1
 " Don't show seperators
@@ -209,3 +206,9 @@ EOF
 
 set cursorline
 au FileType gitcommit call Add_header()
+" syn match comment "\v(^\s*//.*\n)+" fold
+set foldmethod=syntax
+set fillchars=fold:\ 
+set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+set foldenable
+nnoremap  <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? "zMzxztk" : 'zc')<cr>
