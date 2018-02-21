@@ -10,11 +10,14 @@
 # echo "eerro: "
 
 BEGIN {
-    fmt["B"]="\033[1m"; fmt["b"]="0\33[21m";
+    fmt["B"]="\033[1m"; fmt["b"]="\033[21m";
     green    ="\033[32m"
     red      ="\033[31m"
     magenta  ="\033[35m"
     nocol    ="\033[39m"
+
+    cnt_err=0;
+    cnt_warn=0;
 
     arr[1]="error";
     arr[2]="warning";
@@ -26,11 +29,18 @@ BEGIN {
 {
      if( tolower($0) ~ arr[1] ) {
          printf("%s%s%s%s%s\n", red, fmt["B"],$0, fmt["b"], nocol )
+         cnt_err+=1;
      } else if( tolower($0) ~ arr[2] ) {
          printf("%s%s%s%s%s\n", magenta, fmt["B"],$0, fmt["b"], nocol )
+        cnt_warn+=1;
      } else if( tolower($0) ~ arr[3] ) {
          printf("%s%s%s%s%s\n", green, fmt["B"],$0, fmt["b"], nocol )
      } else {
          printf("%s\n",$0)
      }
 }
+END {
+     printf( "%d Errors!\n", cnt_err );
+     printf( "%d  Warns!\n", cnt_warn );
+ }
+
