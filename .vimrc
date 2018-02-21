@@ -1,7 +1,7 @@
 set nocompatible
 execute pathogen#infect()
 syntax on
-set background=light
+set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
 filetype indent off
@@ -93,6 +93,10 @@ let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_add_preview_to_completeopt = 1
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
+nnoremap <leader>je :YcmCompleter GoToDefinition<CR>
+"CtrlP
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPBuffer'
 " python - comment out"
 " TODO if file *.py than inoremap <c-\> <esc>0i# <esc>
 " It's better to do that in vim lang file ~/.vim/ftplugin/ "
@@ -106,8 +110,8 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_cpp_checkers = ['cppcheck']
-let g:syntastic_c_checkers =   ['cppcheck']
+" let g:syntastic_cpp_checkers = ['cppcheck']
+" let g:syntastic_c_checkers =   ['cppcheck']
 let g:syntastic_loc_list_height = 3
 let g:syntastic_sh_checkers =   ['shellcheck']
 let g:syntastic_loc_list_height = 5
@@ -123,9 +127,19 @@ let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
 let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
 let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 
-let g:UltiSnipsExpandTrigger="<c-e>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" Ultisnip change begin
+" let g:UltiSnipsExpandTrigger="<c-t>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+" end
 
 " Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
@@ -184,6 +198,11 @@ let g:syntastic_javascript_checkers = ['jshint']
 " show any linting errors immediately
 let g:syntastic_check_on_open = 1
 
+" ClangFormat
+let g:clang_format#detect_style_file=1
+let g:clang_format#style="google"
+
+
 fun! Add_header()
     0read !git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 endfun
@@ -210,5 +229,7 @@ au FileType gitcommit call Add_header()
 set foldmethod=syntax
 set fillchars=fold:\ 
 set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+set foldlevelstart=20
 set foldenable
-nnoremap  <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? "zMzxztk" : 'zc')<cr>
+nnoremap  <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? "zA" : 'zc')<cr>
+
