@@ -1,5 +1,6 @@
 set nocompatible
 execute pathogen#infect()
+set encoding=utf-8
 syntax on
 set background=dark
 let g:solarized_termcolors=256
@@ -35,6 +36,10 @@ noremap / /\v
 set incsearch
 set showmatch
 set hlsearch
+
+tnoremap <Esc> <C-\><C-n>
+autocmd TermOpen * set bufhidden=hide
+
 inoremap <F1> :set relativenumber!<cr>
 nnoremap <F1> :set relativenumber!<cr>
 vnoremap <F1> :set relativenumber!<cr>
@@ -58,8 +63,9 @@ nnoremap [l :lprev<cr>
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 set completeopt=menuone,menu,longest,preview
 " build tags of your own project with Ctrl-F12
-nnoremap <F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ *<CR>
-nnoremap <F11> :!find -regex '.*\.\([c,C,h,H]\)\([p,P,x,X]\)*' > cscope.files && cscope -b -q -k<CR>
+" nnoremap <F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ *<CR>
+nnoremap <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+nnoremap <C-F11> :!find -regex '.*\.\([c,C,h,H]\)\([p,P,x,X]\)*' > cscope.files && cscope -b -q -k<CR>
 set tags+=~/.vim/tags/cpp
 nnoremap <leader>= :res +10<cr>
 nnoremap <leader>- :res -10<cr>
@@ -68,9 +74,11 @@ nnoremap <leader>n :cn<cr>
 nnoremap <leader>p :cp<cr>
 nnoremap <leader>d :windo diffthis<cr>
 nnoremap <leader>c :cexpr []<cr>
-nnoremap <C-g> :Ack expand("<cword>")<cr>
+nnoremap <C-g> :Ack <cword><cr>
+nnoremap <C-\>gc :Ack <cword> --cc<cr>
 vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'
 " This command adds logging.info in each and every python function in file
+nnoremap <expr> <Leader>R ':%s/\('.expand('<cword>').'\)/\1/g'
 nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Line: '.line(".").' '. submatch(2).''')','g')/<cr>
 nnoremap <leader>f :NERDTreeFind<cr>
 map <C-g> :Ack . expand("<cword>") 
@@ -128,17 +136,17 @@ let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
 let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 
 " Ultisnip change begin
-" let g:UltiSnipsExpandTrigger="<c-t>"
-" let g:UltiSnipsJumpForwardTrigger="<c-b>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="<c-e>"
+let g:UltiSnipsJumpForwardTrigger="<c-n>"
+let g:UltiSnipsJumpBackwardTrigger="<c-j>"
 " make YCM compatible with UltiSnips (using supertab)
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
+" let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+" let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+" let g:SuperTabDefaultCompletionType = '<C-n>'
 " better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+" let g:UltiSnipsExpandTrigger = "<tab>"
+" let g:UltiSnipsJumpForwardTrigger = "<tab>"
+" let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " end
 
 " Markdown
@@ -208,28 +216,31 @@ fun! Add_header()
 endfun
 
 au BufNewFile,BufRead *.log set filetype=log
+au BufRead,BufNewFile *.pde,*.ino set filetype=c++
 
 set diffopt+=iwhite
 
 "au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 "python with virtualenv support
-py << EOF
-
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
-EOF
+" py << EOF
+" 
+" import os
+" import sys
+" if 'VIRTUAL_ENV' in os.environ:
+"   project_base_dir = os.environ['VIRTUAL_ENV']
+"   activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"   execfile(activate_this, dict(__file__=activate_this))
+" EOF
 
 set cursorline
 au FileType gitcommit call Add_header()
 " syn match comment "\v(^\s*//.*\n)+" fold
+set foldlevel=99
 set foldmethod=syntax
 set fillchars=fold:\ 
 set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
 set foldlevelstart=20
 set foldenable
-nnoremap  <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? "zA" : 'zc')<cr>
+"nnoremap  <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? "zA" : 'zc')<cr>
+nnoremap  <silent> <space> :exe 'silent! normal! za'<cr>
 
