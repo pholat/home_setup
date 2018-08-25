@@ -1,26 +1,40 @@
 set nocompatible
 execute pathogen#infect()
-set encoding=utf-8
 syntax on
-set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
 filetype indent off
-set nocompatible
-set backspace=indent,eol,start
 filetype plugin indent on
 Helptags
+set term=screen-256color
+set background=dark
+set nocompatible
+set backspace=indent,eol,start
 set autoindent noexpandtab tabstop=4 shiftwidth=4
 set tw=0
 set cindent
-set tabstop=4
-set shiftwidth=4
 set expandtab
 set softtabstop=4
 set smarttab
 set number
 set nowrap
 set autoindent
+set incsearch
+set showmatch
+set hlsearch
+set completeopt=menuone,menu,longest,preview
+set tags+=~/.vim/tags/cpp
+set t_Co=256
+set laststatus=2  
+set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
+set statusline+=%{fugitive#statusline()}
+set diffopt+=iwhite
+set cursorline
+set foldlevel=98
+set foldmethod=syntax
+set fillchars=fold:\ 
+set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+set cscopequickfix=s+,c+,d+,i+,t+,e+,a+
 
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
@@ -28,45 +42,30 @@ endif
 let g:netrw_liststyle = 3
 let g:netrw_banner = 0
 let g:netrw_browse_split = 3
-" Makefile no expand tabs
-autocmd FileType make setlocal noexpandtab
 
+autocmd FileType make setlocal noexpandtab
 nnoremap / /\v
 noremap / /\v
-set incsearch
-set showmatch
-set hlsearch
 
 tnoremap <Esc> <C-\><C-n>
 autocmd TermOpen * set bufhidden=hide
 
-inoremap <F1> :set relativenumber!<cr>
-nnoremap <F1> :set relativenumber!<cr>
-vnoremap <F1> :set relativenumber!<cr>
+map <F1> :set relativenumber!<cr>
 nnoremap <F2> :NERDTreeToggle<CR>
 nnoremap <F3> :Obsess!<cr>
 nnoremap <F5> :UndotreeToggle<cr>
-inoremap <C-l> :bn<cr>
-nnoremap <C-l> :bn<cr>
-vnoremap <C-l> :bn<cr>
-inoremap <C-h> :bp<cr>
-nnoremap <C-h> :bp<cr>
-vnoremap <C-h> :bp<cr>
+map <C-l> :bn<cr>
+map <C-h> :bp<cr>
 nnoremap ]g :GitGutterNextHunk<cr>
 nnoremap [g :GitGutterPrevHunk<cr>
-nnoremap <leader>R :GitGutterRevertHunk<cr>
 nnoremap ]l :lnext<cr>
 nnoremap [l :lprev<cr>
-"Autosave"
-" au FocusLost * :wa "
-" automatically open and close the popup menu / preview window
+
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-set completeopt=menuone,menu,longest,preview
-" build tags of your own project with Ctrl-F12
-" nnoremap <F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ *<CR>
-nnoremap <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-nnoremap <C-F11> :!find -regex '.*\.\([c,C,h,H]\)\([p,P,x,X]\)*' > cscope.files && cscope -b -q -k<CR>
-set tags+=~/.vim/tags/cpp
+
+" build tags of your own project with Ctrl-F12, not really used -> use & YCM instead
+nnoremap <F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ *<CR>
+nnoremap <F11> :!find -regex '.*\.\([c,C,h,H]\)\([p,P,x,X]\)*' > cscope.files && cscope -b -q -k<CR>
 nnoremap <leader>= :res +10<cr>
 nnoremap <leader>- :res -10<cr>
 nnoremap <leader>h :noh<cr>
@@ -74,27 +73,22 @@ nnoremap <leader>n :cn<cr>
 nnoremap <leader>p :cp<cr>
 nnoremap <leader>d :windo diffthis<cr>
 nnoremap <leader>c :cexpr []<cr>
-nnoremap <C-g> :Ack <cword><cr>
-nnoremap <C-\>gc :Ack <cword> --cc<cr>
-vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'
+nnoremap <C-g>g :Ack <cword><cr>
+nnoremap <C-g>c :Ack <cword> --cc<cr>
 " This command adds logging.info in each and every python function in file
-nnoremap <expr> <Leader>R ':%s/\('.expand('<cword>').'\)/\1/g'
 nnoremap <leader>L :%s/\(\s*\)def \(\w\S*\)\(self.*\):/\=substitute(submatch(0),submatch(0),'&\r'.submatch(1).'\tlogging.info(''File: '.expand("%p").' Line: '.line(".").' '. submatch(2).''')','g')/<cr>
 nnoremap <leader>f :NERDTreeFind<cr>
-map <C-g> :Ack . expand("<cword>") 
+nnoremap  <silent> <space> :exe 'silent! normal! za'<cr>
+inoremap <C-\> <C-x><C-u>
 "Airline options"
 let g:airline_powerline_fonts = 1
 " Don't show seperators
-let g:airline_left_sep=''
-let g:airline_right_sep=''
-set t_Co=256
+" let g:airline_left_sep=''
+" let g:airline_right_sep=''
 let g:airline#extensions#tabline#enabled = 1
-set laststatus=2  
 let g:airline_theme='papercolor'
 let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''SESSION!'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
-set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 let g:gitgutter_sign_column_always = 1
-set statusline+=%{fugitive#statusline()}
 " YCM "
 let g:ycm_python_binary_path = 'python3'
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
@@ -105,9 +99,6 @@ nnoremap <leader>je :YcmCompleter GoToDefinition<CR>
 "CtrlP
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPBuffer'
-" python - comment out"
-" TODO if file *.py than inoremap <c-\> <esc>0i# <esc>
-" It's better to do that in vim lang file ~/.vim/ftplugin/ "
 
 " Syntastic Setup "
 set statusline+=%#warningmsg#
@@ -118,36 +109,10 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ['pylint']
-" let g:syntastic_cpp_checkers = ['cppcheck']
-" let g:syntastic_c_checkers =   ['cppcheck']
 let g:syntastic_loc_list_height = 3
 let g:syntastic_sh_checkers =   ['shellcheck']
 let g:syntastic_loc_list_height = 5
 " To use I add fe: :let g:syntastic_c_include_dirs = ['esp-open-sdk/sdk/include', 'include']"
-
-" OmniCppComplete
-let OmniCpp_NamespaceSearch = 1
-let OmniCpp_GlobalScopeSearch = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
-let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
-let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
-let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-
-" Ultisnip change begin
-let g:UltiSnipsExpandTrigger="<c-e>"
-let g:UltiSnipsJumpForwardTrigger="<c-n>"
-let g:UltiSnipsJumpBackwardTrigger="<c-j>"
-" make YCM compatible with UltiSnips (using supertab)
-" let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-" let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-" let g:SuperTabDefaultCompletionType = '<C-n>'
-" better key bindings for UltiSnipsExpandTrigger
-" let g:UltiSnipsExpandTrigger = "<tab>"
-" let g:UltiSnipsJumpForwardTrigger = "<tab>"
-" let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-" end
 
 " Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
@@ -155,7 +120,6 @@ let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 let g:markdown_minlines = 100
 
 " Undotree persistent
-" Put plugins and dictionaries in this dir (also on Windows)
 let vimDir = '$HOME/.vim'
 let &runtimepath.=','.vimDir
 
@@ -169,21 +133,9 @@ if has('persistent_undo')
     set undofile
 endif
 
-"Ack vim 
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-
 " automatically open and close the popup menu / preview window
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 set completeopt=menuone,menu,longest,preview
-
-" My functions "
-function AddTags()
-    echom "Adding tags"
-    let l:val = "!ctags -R * --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ -f cpp "
-    execute l:val
-endfunction
 
 function AddShComments(funcname)
     let  l:tmplist = ['if $?; then']
@@ -198,18 +150,14 @@ endfunction
 vnoremap <leader>R :call AddShComments(@*)<cr>
 
 source ~/.vim/cs/cscope_maps.vim
-set cscopequickfix=s+,c+,d+,i+,t+,e+,a+
  
 " use jshint
 let g:syntastic_javascript_checkers = ['jshint']
-
 " show any linting errors immediately
 let g:syntastic_check_on_open = 1
-
 " ClangFormat
 let g:clang_format#detect_style_file=1
 let g:clang_format#style="google"
-
 
 fun! Add_header()
     0read !git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
@@ -218,29 +166,20 @@ endfun
 au BufNewFile,BufRead *.log set filetype=log
 au BufRead,BufNewFile *.pde,*.ino set filetype=c++
 
-set diffopt+=iwhite
 
-"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-"python with virtualenv support
-" py << EOF
-" 
-" import os
-" import sys
-" if 'VIRTUAL_ENV' in os.environ:
-"   project_base_dir = os.environ['VIRTUAL_ENV']
-"   activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-"   execfile(activate_this, dict(__file__=activate_this))
-" EOF
-
-set cursorline
 au FileType gitcommit call Add_header()
 " syn match comment "\v(^\s*//.*\n)+" fold
-set foldlevel=99
-set foldmethod=syntax
-set fillchars=fold:\ 
-set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
-set foldlevelstart=20
-set foldenable
-"nnoremap  <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? "zA" : 'zc')<cr>
-nnoremap  <silent> <space> :exe 'silent! normal! za'<cr>
 
+fun! Reg_to_list(findstart,base)
+    let l:regs=[]
+    let l:lvals=["+","%","0","1","2","3","4","5","6","7","8","9",":","*"]
+    for a in range(0,len(l:lvals)-1)
+        let l:tmpval=substitute(getreg(l:lvals[a]),'^ *\(.*\)','\1','')
+        if ( l:tmpval =~ "[[:graph:]]" ) 
+            call add(l:regs, l:tmpval)
+        endif
+    endfor
+    return uniq(l:regs)
+endfun
+
+set completefunc=Reg_to_list

@@ -3,9 +3,9 @@
     autocrlf = false
 	excludesfile = /home/adamd2/.gitignore_global
 [merge]
-    tool = vimdiff
+	tool = vimdiff
 [diff]
-    tool = vimdiff
+	tool = vimdiff
 [push]
 	default = simple
 [alias]

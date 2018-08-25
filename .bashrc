@@ -1,8 +1,14 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
-alias tmux='TERM=xterm-256color tmux'
 set -o vi
+export EDITOR=vim
+alias tmux="tmux -2"
+# if command -v tmux>/dev/null; then
+#   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux -2
+# fi
+
+GLOBIGNORE=".:.."
 
 # If not running interactively, don't do anything
 case $- in
@@ -174,4 +180,11 @@ alias cdr='tmpvar=$( ls -d */ -tr | tail -1) && cd "$tmpvar"'
 #clear #for background artifacting
 
 alias mail='( eval $(gpg --decrypt ~/.mail_passwd); imapfilter -vv &&  mutt $@ )'
-setxkbmap -option caps:swapescape
+# usefull
+#dropbox start -i
+#setxkbmap -option caps:swapescape
+#xinput set-prop \"ELAN1200:00 04F3:301A Touchpad\" \"libinput Tapping Enabled\" 1
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/pholat/.sdkman"
+[[ -s "/home/pholat/.sdkman/bin/sdkman-init.sh" ]] && source "/home/pholat/.sdkman/bin/sdkman-init.sh"
