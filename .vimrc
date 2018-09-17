@@ -90,10 +90,11 @@ let g:airline_theme='papercolor'
 let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''SESSION!'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
 let g:gitgutter_sign_column_always = 1
 " YCM "
-let g:ycm_python_binary_path = 'python3'
+let g:ycm_python_binary_path = '/usr/bin/python3'
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion=0
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
 nnoremap <leader>je :YcmCompleter GoToDefinition<CR>
 "CtrlP
@@ -166,6 +167,14 @@ endfun
 au BufNewFile,BufRead *.log set filetype=log
 au BufRead,BufNewFile *.pde,*.ino set filetype=c++
 
+:python3 << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
 
 au FileType gitcommit call Add_header()
 " syn match comment "\v(^\s*//.*\n)+" fold
@@ -183,3 +192,18 @@ fun! Reg_to_list(findstart,base)
 endfun
 
 set completefunc=Reg_to_list
+
+
+""""
+let g:UltiSnipsExpandTrigger = "<nop>"
+let g:ulti_expand_or_jump_res = 0
+function ExpandSnippetOrCarriageReturn()
+    let snippet = UltiSnips#ExpandSnippetOrJump()
+    if g:ulti_expand_or_jump_res > 0
+        return snippet
+    else
+        return "\<CR>"
+    endif
+endfunction
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
+
