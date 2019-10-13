@@ -4,11 +4,8 @@
 set -o vi
 export EDITOR=vim
 alias tmux="tmux -2"
-# if command -v tmux>/dev/null; then
-#   [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && exec tmux -2
-# fi
-
 GLOBIGNORE=".:.."
+
 
 # If not running interactively, don't do anything
 case $- in
@@ -19,10 +16,8 @@ esac
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 export HISTCONTROL=ignoreboth:erasedups
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=
-HISTFILESIZE=
+HISTSIZE=-1
+HISTFILESIZE=-1
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -59,29 +54,12 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
 unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
@@ -91,24 +69,12 @@ fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias :e='vim'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
+alias f='fuck'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -121,70 +87,87 @@ if ! shopt -oq posix; then
   fi
 fi
 
-git_branch () { git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'; }
-HOST='\033[02;36m\h'; HOST=' '$HOST
-TIME='\033[00;31m\t \033[00;32m'
-LOCATION=' \033[01;38m`pwd | sed "s#\(/[^/]\{1,\}/[^/]\{1,\}/[^/]\{1,\}/\).*\(/[^/]\{1,\}/[^/]\{1,\}\)/\{0,1\}#\1_\2#g"`'
-BRANCH=' \033[00;33m$(git_branch)\[\033[00m\n\$ '
-PS1=$TIME$USER$LOCATION$BRANCH
-PS2='\[\033[01;36m>'
 
+# store colors
+MAGENTA="\[\033[0;35m\]"
+YELLOW="\[\033[01;33m\]"
+BLUE="\[\033[00;34m\]"
+LIGHT_GRAY="\[\033[0;37m\]"
+CYAN="\[\033[0;36m\]"
+GREEN="\[\033[00;32m\]"
+RED="\[\033[0;31m\]"
+VIOLET='\[\033[01;35m\]'
+BLACK="\[\033[30;02m\]"
 
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+function color_my_prompt {
+  local __time='\[\033[03m\[\033[34;01m\t\033[00;32m'
+  local __cur_location="$BLUE \w"           # capital 'W': current directory, small 'w': full file path
+  local __git_branch_color="$RED"
+  local __user_input_color="$BLACK"
+  local __git_branch=$(__git_ps1);
+
+  # Build the PS1 (Prompt String)
+  PS1="$__time$__cur_location$__git_branch_color$__git_branch $__user_input_color\n▶ "
+}
+
+export PROMPT_COMMAND="history -a; color_my_prompt"
+
+# if .git-prompt.sh exists, set options and execute it
+if [ -f ~/.git-prompt.sh ]; then
+  GIT_PS1_SHOWDIRTYSTATE=true
+  #GIT_PS1_SHOWSTASHSTATE=false
+  GIT_PS1_SHOWUNTRACKEDFILES=true
+  GIT_PS1_SHOWUPSTREAM="auto"
+  GIT_PS1_HIDE_IF_PWD_IGNORED=true
+  GIT_PS1_SHOWCOLORHINTS=true
+  . ~/.git-prompt.sh
+fi
+
 shopt -s cdspell
 shopt -s cmdhist
 
 alias LOG='tee log`date +"%F-%H-%M-%S"`.txt'
-function CP { rsync -ah --progress $1 $2; }
-export CP
 
 function PRETTY { $* 2>&1 | awk -f ~/.prettyfier.awk; test ${PIPESTATUS[0]} -eq 0; }
 export -f PRETTY
 
-function SIGN_CHECK { openssl asn1parse -inform DER -in $1; }
+function SIGN_CHECK { openssl asn1parse -inform DER -in "$1"; }
 export -f SIGN_CHECK
 
-function CLEAN_HISTORY { cat .bash_history | sort -u | sed -f .bashhistclean > tmp.hist && vim tmp.hist; }
+function CLEAN_HISTORY { sort -u < cat .bash_history | sed -f .bashhistclean > tmp.hist && vim tmp.hist; }
 export -f CLEAN_HISTORY
 
-function B64 { sha1sum $1 | xxd -r -p | base64; }
+function B64 { sha1sum "$1" | xxd -r -p | base64; }
 export -f B64
 
-eval $(thefuck --alias)
 function DBG { bash -evx $@; }
 export DBG
 
+function vimdiff { nvim -d $@; }
+export vimdiff
+
 alias :q='exit'
-alias :e='vim'
+alias :e='nvim'
+alias vim='nvim'
+alias vi='nvim'
 
 alias got='git '
 alias get='git '
 alias cdr='tmpvar=$( ls -d */ -tr | tail -1) && cd "$tmpvar"'
 
-#echo -en "\e]P0073642" #black
-#echo -en "\e]P8002b36" #brblack
-#echo -en "\e]P1dc322f" #red
-#echo -en "\e]P9cb4b16" #brred
-#echo -en "\e]P2859900" #green
-#echo -en "\e]PA586e75" #brgreen
-#echo -en "\e]P3b58900" #yellow
-#echo -en "\e]PB657b83" #bryellow
-#echo -en "\e]P4268bd2" #blue
-#echo -en "\e]PC839496" #brblue
-#echo -en "\e]P5d33682" #magenta
-#echo -en "\e]PD6c71c4" #brmagenta
-#echo -en "\e]P62aa198" #cyan
-#echo -en "\e]PE93a1a1" #brcyan
-#echo -en "\e]P7eee8d5" #white
-#echo -en "\e]PFfdf6e3" #brwhite
-#clear #for background artifacting
+function mail { ( eval $(gpg --decrypt ~/.mail_passwd); imapfilter -vv &&  mutt $@ ) }
+setxkbmap -option caps:swapescape
 
-alias mail='( eval $(gpg --decrypt ~/.mail_passwd); imapfilter -vv &&  mutt $@ )'
-# usefull
-#dropbox start -i
-#setxkbmap -option caps:swapescape
-#xinput set-prop \"ELAN1200:00 04F3:301A Touchpad\" \"libinput Tapping Enabled\" 1
+export HSTR_CONFIG=hicolor,prompt-bottom       # get more colors
+if [[ $- =~ .*i.* ]]; then bind '"\C-r": "hstr -- \C-j"'; fi
+function MOD { [[ $1 ]] && local DIR="./$1/" || local DIR="./" ; printf "${DIR}%s\n" <<< echo $(cd ${DIR}; git st -s | grep '\([\?M]\)' | cut -d ' ' -f 3); }
+export MOD
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/pholat/.sdkman"
-[[ -s "/home/pholat/.sdkman/bin/sdkman-init.sh" ]] && source "/home/pholat/.sdkman/bin/sdkman-init.sh"
+export IDF_PATH="$HOME/workspace/esp-idf/"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="$PATH:$HOME/workspace/flutter/bin:$HOME/esp/xtensa-esp32-elf/bin"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+alias icat='kitty +kitten icat'
+alias please="sudo"

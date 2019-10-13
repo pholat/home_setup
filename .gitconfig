@@ -1,21 +1,40 @@
 [core]
-    editor = vim
+    editor = nvim
     autocrlf = false
-	excludesfile = /home/adamd2/.gitignore_global
-[merge]
-	tool = vimdiff
-[diff]
-	tool = vimdiff
-[push]
-	default = simple
-[alias]
-  co = checkout
-  ci = commit
-  st = status
-  br = branch
-  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  type = cat-file -t
-  dump = cat-file -p
+	excludesfile = $(HOME)/.gitignore_global
 [user]
 	name = pholat
 	email = pholat@gmail.com
+[alias]
+    st=status
+    ll=log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    co=checkout
+    ci=commit
+    re=rebase
+    di=difftool
+    lo=log origin/master..HEAD --oneline
+    br = branch
+    logg = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    type = cat-file -t
+    dump = cat-file -p
+    branchtime = for-each-ref --sort=committerdate refs/heads/ --format='%(color: red)%(committerdate:short) %(color: cyan)%(refname:short)'
+[push]
+	default = matching
+[merge]
+	tool = vimdiff
+[mergetool]
+	keepBackup = false
+[mergetool "vimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[difftool "diff"]
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+  #prompt = false
+[diff]
+	tool = diff
+[color]
+  diff = true
+  status = true
+  branch = true
+  interactive = true
+  ui = true
+  pager = true
