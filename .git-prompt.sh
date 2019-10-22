@@ -547,7 +547,7 @@ __git_ps1 ()
 	fi
 
 	local f="$w$i$s$u"
-	local gitstring="$c$b\[\033[30;02m\]${f:+$z$f}$r$p""\[\033[0;31m\]"
+	local gitstring="$c  $b\[\033[30;02m\]${f:+$z$f}$r$p""\[\033[0;31m\]"
 
 	if [ $pcmode = yes ]; then
 		if [ "${__git_printf_supports_v-}" != yes ]; then

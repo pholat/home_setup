@@ -2,6 +2,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 set -o vi
+set -o pipefail
+set colored-completion-prefix
+set colored-stats
+set completion-map-case
+set mark-directories
+# set show-mode-in-prompt
 export EDITOR=vim
 alias tmux="tmux -2"
 GLOBIGNORE=".:.."
@@ -24,6 +30,10 @@ HISTFILESIZE=-1
 shopt -s checkwinsize
 shopt -s histappend
 shopt -s globstar
+shopt -s cdspell
+shopt -s dotglob
+shopt -s extglob
+shopt -s lithist
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -107,7 +117,7 @@ function color_my_prompt {
   local __git_branch=$(__git_ps1);
 
   # Build the PS1 (Prompt String)
-  PS1="$__time$__cur_location$__git_branch_color$__git_branch $__user_input_color\n▶ "
+  PS1="$__time$__cur_location$__git_branch_color$__git_branch $__user_input_color [🐍$(pyenv version-name)]\n▶ "
 }
 
 export PROMPT_COMMAND="history -a; color_my_prompt"
@@ -171,3 +181,4 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 alias icat='kitty +kitten icat'
 alias please="sudo"
+eval "$(pyenv init -)"
