@@ -174,9 +174,6 @@ bind '"\C-r": "\e^ihstr -- \n"'
 function MOD { [[ $1 ]] && local DIR="./$1/" || local DIR="./" ; printf "${DIR}%s\n" <<< echo $(cd ${DIR}; git st -s | grep '\([\?M]\)' | cut -d ' ' -f 3); }
 export MOD
 
-export IDF_PATH="$HOME/workspace/esp-idf/"
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="$PATH:$HOME/workspace/flutter/bin:$HOME/esp/xtensa-esp32-elf/bin"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
