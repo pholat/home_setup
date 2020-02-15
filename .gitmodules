@@ -4,3 +4,6 @@
 [submodule ".config/awesome/battery-widget"]
 	path = .config/awesome/battery-widget
 	url = https://github.com/deficient/battery-widget.git
+[submodule ".config/awesome/awesome.brightness-widget"]
+	path = .config/awesome/awesome.brightness-widget
+	url = https://github.com/velovix/awesome.brightness-widget
