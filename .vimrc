@@ -3,7 +3,7 @@ let g:pathogen_disabled = ["html5-syntax.vim", "html5.vim", "tsuquyomi", "typesc
 execute pathogen#infect()
 set encoding=utf-8
 syntax on
-set background=light
+set background=dark
 colorscheme papercolor
 filetype indent off
 set backspace=indent,eol,start
@@ -77,6 +77,9 @@ nnoremap [g :GitGutterPrevHunk<cr>
 nnoremap <leader>R :GitGutterRevertHunk<cr>
 nnoremap ]l :lnext<cr>
 nnoremap [l :lprev<cr>
+imap <C-BS> <C-W>
+noremap! <C-h> <C-w>
+set backspace=indent,eol,start
 
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 

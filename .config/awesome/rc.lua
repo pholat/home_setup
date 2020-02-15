@@ -58,20 +58,9 @@ local modkey = "Mod4"
 awful.layout.layouts = {
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile,
-    -- awful.layout.suit.tile.top,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
     awful.layout.suit.floating,
-    -- awful.layout.suit.tile.left,
-    -- awful.layout.suit.fair,
-    -- awful.layout.suit.fair.horizontal,
-    -- awful.layout.suit.spiral,
-    -- awful.layout.suit.spiral.dwindle,
-    -- awful.layout.suit.magnifier,
-    -- awful.layout.suit.corner.nw,
-    -- awful.layout.suit.corner.ne,
-    -- awful.layout.suit.corner.sw,
-    -- awful.layout.suit.corner.se,
 }
 -- }}}
 
@@ -91,34 +80,18 @@ end
 -- }}}
 
 -- {{{ Menu
--- Create a launcher widget and a main menu
--- myawesomemenu = {
---    { "hotkeys", function() return false, hotkeys_popup.show_help end},
---    { "manual", terminal .. " -e man awesome" },
---    { "edit config", editor_cmd .. " " .. awesome.conffile },
---    { "restart", awesome.restart },
---    { "quit", function() awesome.quit() end}
--- }
--- mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
---                                     { "Debian", debian.menu.Debian_menu.Debian },
---                                     { "open terminal", terminal }
---                                   }
---                         })
--- mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
---                                      menu = mymainmenu })
-nautiluslauncher  =  awful.widget.launcher({ image = "/usr/share/icons/Adwaita/32x32/apps/system-file-manager.png",
+local nautiluslauncher  =  awful.widget.launcher({ image = "/usr/share/icons/Adwaita/32x32/apps/system-file-manager.png",
                                      command = "thunar" })
-
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
+local mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+local mytextclock = wibox.widget.textclock()
 local battery_widget = require("battery-widget")
 local battery = battery_widget({adapter = "BAT0"})
 
@@ -208,31 +181,17 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create a taglist widget
     s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
-    -- s.mytaglist.shape=gears.shape.rounded_rect
 
     -- Create a tasklist widget
-    --
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons, nil, update_tasklist_foo)
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s,bg = "black" })
-    --s.mywibox2 = awful.wibar({ position = "top", screen = s,bg=beautiful.bg_normal .. "55" })
-
-
     -- Add widgets to the wibox
     s.mywibox:setup {
-     --   layout = wibox.layout.stack,
-     --   {
-     --       id="over",
-     --       layout = wibox.layout.align.horizontal,
-     --       s.mylauncher
-     --   },
-     --   {
-            id="below",
             layout = wibox.layout.align.horizontal,
             { -- Left widgets
                 layout = wibox.layout.fixed.horizontal,
-                mylauncher,
                 s.mytaglist,
                 nautiluslauncher,
                 s.mypromptbox,
@@ -249,22 +208,14 @@ awful.screen.connect_for_each_screen(function(s)
                 battery.widget,
                 mytextclock,
                 s.mylayoutbox,
-            },
+            }
      --   },
-     --   s.mywibox:connect_signal("mouse::enter", function(w)
-     --       if (w:get_children_by_id("below")[1].visible==true) then
-     --            w:get_children_by_id("below")[1].visible=false
-     --       else
-     --            w:get_children_by_id("below")[1].visible=true
-     --       end
-     --   end)
     }
 end)
 -- }}}
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -272,6 +223,15 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
+    awful.key({ modkey, "Control"}, "t",
+        function ()
+            if awful.screen.focused().mywibox.visible then
+                awful.screen.focused().mywibox.visible = false
+            else
+                awful.screen.focused().mywibox.visible = true
+            end
+        end
+        , {description="lol", group="tag"}),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help, {description="show help", group="awesome"}),
     ---awful.key({ modkey,           }, "h",   awful.tag.viewprev,      {description = "view previous", group = "tag"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,      {description = "view previous", group = "tag"}),
@@ -292,9 +252,6 @@ local globalkeys = awful.util.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    -- awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-    --           {description = "show main menu", group = "awesome"}),
-
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
@@ -307,9 +264,6 @@ local globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
     cyclefocus.key({ "Mod1" }, "Tab", {
-         -- cycle_filters as a function callback:
-         -- cycle_filters = { function (c, source_c) return c.screen == source_c.screen end },
-         -- cycle_filters from the default filters:
          cycle_filters = { cyclefocus.filters.same_screen, cyclefocus.filters.common_tag },
          keys = {'Tab', 'ISO_Left_Tab'}  -- default, could be left out
      }),
@@ -496,9 +450,6 @@ for i = 1, 9 do
                       end
                   end,
                   {description = "toggle focused client on tag #" .. i, group = "tag"})
-      -- JUST ADDED
-                    --//
-                    --//
       )
 end
 
@@ -651,15 +602,11 @@ end)
 
 -- startup scripts
 local startupCommands = {
-    -- "dropbox start -i",
-    -- awful.util.spawn("thunderbird")
     "xmodmap -e \"keycode 135 = Super_L\"",
     "pulseaudio --start",
     "compton -b",
     "setxkbmap -option caps:swapescape",
     "xinput set-prop \"ELAN1200:00 04F3:301A Touchpad\" \"libinput Tapping Enabled\" 1",
-    "keepassxc",
-    "firefox",
     "rescuetime",
     "nm-applet",
     "blueman-applet",

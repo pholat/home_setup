@@ -8,6 +8,41 @@ source ~/.vimrc
 
 call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+"Plug 'ack.vim'
+"Plug 'Colorizer'
+"Plug 'copypath.vim'
+"Plug 'ctrlp.vim'
+"Plug 'gundo.vim'
+"Plug 'html5-syntax.vim'
+"Plug 'html5.vim'
+"Plug 'nerdtree'
+"Plug 'nvim-gdb'
+"Plug 'papercolor-theme'
+"Plug 'python-syntax'
+"Plug 'syntax'
+"Plug 'tsuquyomi'
+"Plug 'typescript-vim'
+"Plug 'ultisnips'
+"Plug 'undotree'
+"Plug 'vim-airline-themes'
+"Plug 'vim-airline'
+" Plug 'vim-clang-format'
+"Plug 'vim-cmake'
+"Plug 'vim-colors-solarized'
+"Plug 'vim-dirdiff'
+"Plug 'vim-fugitive'
+"Plug 'vim-gitgutter'
+"Plug 'vim-javascript'
+"Plug 'vim-lsp-cxx-highlight'
+"Plug 'vim-lua'
+"Plug 'vim-markdown'
+"Plug 'vim-node'
+"Plug 'vim-obsession'
+"Plug 'vim-openscad'
+"Plug 'vim-snippets'
+"Plug 'vim-tail'
+"Plug 'vim-tar'
+"Plug 'wstrip.vim'
 call plug#end()
 
 nmap <silent> gd <Plug>(coc-definition)
@@ -62,4 +97,7 @@ inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 highlight LspCxxHlSymVariableStatic ctermfg=52
-set statusline^=%{coc#status()}
+let g:airline#extensions#coc#enabled = 1
+
+nmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+" if ever forget again - CocCommand ->pythonInterpreter -> set proper one ...

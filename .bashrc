@@ -156,6 +156,7 @@ export DBG
 function vimdiff { nvim -d $@; }
 export vimdiff
 
+alias py="python3"
 alias :q='exit'
 alias :e='nvim'
 alias vim='nvim'
@@ -168,8 +169,8 @@ alias cdr='tmpvar=$( ls -d */ -tr | tail -1) && cd "$tmpvar"'
 function mail { ( eval $(gpg --decrypt ~/.mail_passwd); imapfilter -vv &&  mutt $@ ) }
 setxkbmap -option caps:swapescape
 
-export HSTR_CONFIG=hicolor,prompt-bottom       # get more colors
-if [[ $- =~ .*i.* ]]; then bind '"\C-r": "hstr -- \C-j"'; fi
+export HSTR_CONFIG=hicolor,prompt-bottom,help-on-opposite-side
+bind '"\C-r": "\e^ihstr -- \n"'
 function MOD { [[ $1 ]] && local DIR="./$1/" || local DIR="./" ; printf "${DIR}%s\n" <<< echo $(cd ${DIR}; git st -s | grep '\([\?M]\)' | cut -d ' ' -f 3); }
 export MOD
 
@@ -181,4 +182,6 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 alias icat='kitty +kitten icat'
 alias please="sudo"
+alias pd='pushd'
 eval "$(pyenv init -)"
+source $(pyenv root)/completions/pyenv.bash

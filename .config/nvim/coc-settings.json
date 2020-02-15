@@ -1,20 +1,89 @@
 {
+    "cSpell.numSuggestions": 8,
+    "cSpell.language": "en,pl",
+    "cSpellExt.enableDictionaries": ["polish"],
     "python.jediEnabled": false,
-    // "python.jediPath" : "/home/pholat/.pyenv/versions/3.7.3/envs/nvim3/lib/python3.7/site-packages/",
     "languageserver": {
+    "lua": {
+      "command": "lua-lsp",
+      "filetypes": ["lua"]
+    },
         "ccls": {
             "command": "ccls",
-            "filetypes": ["c", "cpp", "objc", "objcpp"],
-            "rootPatterns": [".ccls", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ],
+            "trace.server": "verbose",
             "initializationOptions": {
-                "cache": {
-                    "directory": "/tmp/ccls"
-                }
+                "cacheDirectory": "/tmp/ccls"
             }
         },
+        "clangd": {
+            "command": "clangd-9",
+            "args": [
+                "--background-index",
+                "-clang-tidy"
+            ],
+            "rootPatterns": [
+                "compile_flags.txt",
+                "compile_commands.json",
+                ".git/",
+                ".hg/"
+            ],
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ]
+        },
         "lua": {
-          "command": "lua-lsp",
-          "filetypes": ["lua"]
+            "command": "lua-lsp",
+            "filetypes": [
+                "lua"
+            ]
         }
-    }
+    },
+    "cSpell.userWords": [
+      "cosia",
+      "kitsu"
+    ],
+    "cSpell.enabledLanguageIds": [
+      "asciidoc",
+      "c",
+      "cpp",
+      "csharp",
+      "css",
+      "git-commit",
+      "go",
+      "handlebars",
+      "haskell",
+      "html",
+      "jade",
+      "java",
+      "javascript",
+      "javascriptreact",
+      "json",
+      "jsonc",
+      "latex",
+      "less",
+      "markdown",
+      "php",
+      "pl",
+      "plaintext",
+      "pug",
+      "python",
+      "restructuredtext",
+      "rust",
+      "scala",
+      "scss",
+      "text",
+      "typescript",
+      "typescriptreact",
+      "yaml",
+      "yml"
+    ]
 }
