@@ -2,8 +2,6 @@ set nocompatible
 set hidden
 set encoding=utf-8
 syntax on
-set background=dark
-" colorscheme papercolor
 filetype indent off
 set backspace=indent,eol,start
 filetype indent plugin on
@@ -71,7 +69,8 @@ vnoremap <C-H> :tabp<cr>
 vnoremap <C-L> :tabn<cr>
 nnoremap ]g :GitGutterNextHunk<cr>
 nnoremap [g :GitGutterPrevHunk<cr>
-nnoremap <leader>R :GitGutterRevertHunk<cr>
+nnoremap <leader>R :GitGutterUndoHunk<cr>
+nnoremap <leader>S :GitGutterStageHunk<cr>
 nnoremap ]l :lnext<cr>
 nnoremap [l :lprev<cr>
 imap <C-BS> <C-W>
@@ -90,7 +89,7 @@ nnoremap <leader>n :cn<cr>
 nnoremap <leader>p :cp<cr>
 nnoremap <leader>d :windo diffthis<cr>
 nnoremap <leader>c :cexpr []<cr>
-nnoremap <C-g> :Ack <cword><cr>
+nnoremap <C-g> :grep '<cword>' -I **/*.{cpp,hpp,h,c}<cr>
 nnoremap <C-\>gc :Ack <cword> --cc<cr>
 vnoremap <expr> // 'y/\V'.escape(@",'\').'<CR>'
 nnoremap <expr> <Leader>R ':%s/\('.expand('<cword>').'\)/\1/g'
@@ -186,16 +185,6 @@ au BufNewFile,BufRead *.log set filetype=log
 au BufRead,BufNewFile *.py set expandtab
 au BufRead,BufNewFile *.py set foldmethod=indent
 au BufRead,BufNewFile *.pde,*.ino set filetype=cpp
-
-"python with virtualenv support
-:python3 << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
-EOF
 
 au FileType gitcommit call Add_header()
 " python highlighting
