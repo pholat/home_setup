@@ -1,14 +1,12 @@
 set nocompatible
-let g:pathogen_disabled = ["html5-syntax.vim", "html5.vim", "tsuquyomi", "typescript-vim", "vim-node" ]
-execute pathogen#infect()
+set hidden
 set encoding=utf-8
 syntax on
 set background=dark
-colorscheme papercolor
+" colorscheme papercolor
 filetype indent off
 set backspace=indent,eol,start
 filetype indent plugin on
-Helptags
 set autoindent noexpandtab tabstop=4 shiftwidth=4
 set tw=0
 set cindent
@@ -28,7 +26,6 @@ set laststatus=2
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 set statusline+=%{fugitive#statusline()}
 set diffopt+=iwhite
-set cursorline
 set foldlevel=98
 set foldmethod=syntax
 set fillchars=fold:\ 
@@ -111,7 +108,6 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 " let g:airline_theme='papercolor'
 let g:airline_theme='cobalt2'
-let g:airline_section_z = airline#section#create(['%{ObsessionStatus(''SESSION!'', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
 set signcolumn=yes
 " YCM "
 let g:ycm_python_binary_path = '/usr/bin/python3'
@@ -163,9 +159,6 @@ endfunction
 
 vnoremap <leader>R :call AddShComments(@*)<cr>
 
-source ~/.vim/cs/cscope_maps.vim
-set cscopequickfix=s+,c+,d+,i+,t+,e+,a+
- 
 " use jshint
 let g:syntastic_javascript_checkers = ['jshint']
 " show any linting errors immediately
