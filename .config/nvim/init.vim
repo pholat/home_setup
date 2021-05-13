@@ -14,7 +14,13 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'mileszs/ack.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
-Plug 'NLKNguyen/papercolor-theme'
+Plug 'junegunn/vim-peekaboo'
+Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
+Plug 'torrancew/vim-openscad'
+Plug 'aklt/plantuml-syntax'
+Plug 'weirongxu/plantuml-previewer.vim'
+Plug 'tyru/open-browser.vim'
+Plug 'overcache/NeoSolarized'
 call plug#end()
 
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
@@ -22,6 +28,9 @@ let &packpath = &runtimepath
 let g:python3_host_prog='/home/pholat/.pyenv/versions/nvim3/bin/python'
 let g:python_host_prog='/home/pholat/.pyenv/versions/nvim/bin/python'
 source ~/.vimrc
+" let g:solarized_termcolors=256
+let g:lsp_cxx_hl_use_text_props = 1
+highlight LspCxxHlSymClassMethod cterm=italic
 let g:solarized_termcolors= 16 
 let g:solarized_termtrans = 0 
 let g:solarized_degrade = 0
@@ -83,3 +92,5 @@ highlight LspCxxHlSymVariableStatic ctermfg=52
 set statusline^=%{coc#status()}
 nmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open '<CR>
 map <C-C> "+y
+set background=light
+colorscheme papercolor

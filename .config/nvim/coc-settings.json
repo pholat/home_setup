@@ -2,55 +2,25 @@
     "cSpell.numSuggestions": 8,
     "cSpell.language": "en,pl",
     "cSpellExt.enableDictionaries": ["polish"],
+    "clangd.semanticHighlighting": true,
+    "clangd.arguments": [
+        "--query-driver",
+        "--background-index"
+    ],
+    "clangd.compilationDatabasePath":"build-linux-Debug",
     "python.jediEnabled": false,
-    "languageserver": {
-    "lua": {
-      "command": "lua-lsp",
-      "filetypes": ["lua"]
-    },
-        "ccls": {
-            "command": "ccls",
-            "filetypes": [
-                "c",
-                "cpp",
-                "objc",
-                "objcpp"
-            ],
-            "trace.server": "verbose",
-            "initializationOptions": {
-                "cacheDirectory": "/tmp/ccls"
-            }
-        },
-        "clangd": {
-            "command": "clangd-9",
-            "args": [
-                "--background-index",
-                "-clang-tidy"
-            ],
-            "rootPatterns": [
-                "compile_flags.txt",
-                "compile_commands.json",
-                ".git/",
-                ".hg/"
-            ],
-            "filetypes": [
-                "c",
-                "cpp",
-                "objc",
-                "objcpp"
-            ]
-        },
-        "lua": {
-            "command": "lua-lsp",
-            "filetypes": [
-                "lua"
-            ]
-        }
-    },
     "cSpell.userWords": [
-      "cosia",
       "kitsu"
     ],
+    "git.enableGutters": false,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.provider": "autopep8",
+    "python.linting.lintOnSave": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": ["--ignore=E501,W601"],
+    "diagnostic-languageserver.filetypes": {
+      "sh": "shellcheck"
+    },
     "cSpell.enabledLanguageIds": [
       "asciidoc",
       "c",
